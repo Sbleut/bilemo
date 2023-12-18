@@ -1,0 +1,1 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0827cc7b4af644c9bc7292e4e6af1b2e)](https://app.codacy.com/gh/Sbleut/bilemo/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
