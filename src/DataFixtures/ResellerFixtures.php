@@ -30,7 +30,6 @@ class ResellerFixtures extends Fixture
             $reseller->setPassword($this->userPasswordHasher->hashPassword($reseller, "password"));
             $this->addReference('reseller_'.$i, $reseller);
             $manager->persist($reseller);
-            $listReseller[]= $reseller;
         }
 
         $manager->flush();

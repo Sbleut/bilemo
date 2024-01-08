@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -12,19 +14,23 @@ use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[ApiResource(
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(),
+        new Post(
+        ),
         new Delete(),
     ],
+    normalizationContext: ['groups' => ['customer:read']],
     denormalizationContext:
     [
         "groups" => [
-            "date:write"
+            "date:write",
+            "customer:write"
         ]
     ]
 )]
@@ -37,26 +43,33 @@ class Customer
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['customer:read', 'customer:write'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['customer:read', 'customer:write'])]
     private ?string $firstName = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['customer:read', 'customer:write'])]    
     private ?string $facturationAddress = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['customer:read', 'customer:write'])]
     private ?string $email = null;
 
     #[ORM\ManyToOne(inversedBy: 'customers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['customer:read'])]
+    #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?Reseller $reseller = null;
 
     #[ORM\Column(type: Types::GUID)]
     #[ApiProperty(identifier: true)]   
+    #[Groups(['customer:read'])]
     private ?string $uuid = null;
 
     public function getId(): ?int
