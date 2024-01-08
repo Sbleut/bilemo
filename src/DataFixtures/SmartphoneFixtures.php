@@ -8,8 +8,9 @@ use Doctrine\Persistence\ObjectManager;
 
 use Symfony\Component\Uid\Uuid;
 
-class AppFixtures extends Fixture
+class SmartphoneFixtures extends Fixture
 {
+
     
     // MODIFY Fixtures to match Entity + OneFile By FixtureEntity 
     public function load(ObjectManager $manager): void
@@ -25,6 +26,8 @@ class AppFixtures extends Fixture
 
             $manager->persist($smartphone);
         }
+
+        $manager->flush();
 
     }
 }

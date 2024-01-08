@@ -2,15 +2,28 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Repository\ResellerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ResellerRepository::class)]
+#[ApiResource(
+    operations : [
+        new Post(
+            validationContext: ['groups' => ['Default', 'postValidation'],]
+        ),
+    ],    
+)]
 class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -19,6 +32,8 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(groups: ['postValidation'])]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -28,13 +43,14 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank(groups: ['postValidation'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
     private ?string $companyName = null;
 
-    #[ORM\Column(type: 'uuid')]
-    private ?Uuid $uuid = null;
+    #[ORM\Column(type: Types::GUID)]
+    private ?string $uuid = null;
 
     #[ORM\OneToMany(mappedBy: 'reseller', targetEntity: Customer::class, orphanRemoval: true)]
     private Collection $customers;
@@ -69,6 +85,16 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->getUserIdentifier();
     }
 
     /**
@@ -126,12 +152,12 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUuid(): ?Uuid
+    public function getUuid(): ?string
     {
         return $this->uuid;
     }
 
-    public function setUuid(Uuid $uuid): static
+    public function setUuid(string $uuid): static
     {
         $this->uuid = $uuid;
 

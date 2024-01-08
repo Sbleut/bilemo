@@ -10,6 +10,8 @@ use Symfony\Component\Uid\Uuid;
 
 class ResellerFixtures extends Fixture
 {
+    
+    public const RESELLER_REFERENCE = 'reseller';
     private $userPasswordHasher;
     
     public function __construct(UserPasswordHasherInterface $userPasswordHasher)
@@ -26,16 +28,10 @@ class ResellerFixtures extends Fixture
             $reseller->setRoles(["ROLE_USER"]);
             $reseller->setUuid(Uuid::v6());
             $reseller->setPassword($this->userPasswordHasher->hashPassword($reseller, "password"));
+            $this->addReference('reseller_'.$i, $reseller);
             $manager->persist($reseller);
             $listReseller[]= $reseller;
         }
-
-        // Création d'un user admin
-        $userAdmin = new Reseller();
-        $userAdmin->setEmail("admin@bookapi.com");
-        $userAdmin->setRoles(["ROLE_ADMIN"]);
-        $userAdmin->setPassword($this->userPasswordHasher->hashPassword($userAdmin, "password"));
-        $manager->persist($userAdmin);
 
         $manager->flush();
     }
