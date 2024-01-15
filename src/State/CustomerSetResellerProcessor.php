@@ -20,10 +20,7 @@ class CustomerSetResellerProcessor implements ProcessorInterface
     {
         if ($data instanceof Customer && $data->getReseller() === null && $this->security->getUser()) {
             $data->setReseller($this->security->getUser());
-            $data->setCreatedAt(new \DateTimeImmutable());
-            $data->setUuid(Uuid::v6());
         }
-        $this->innerProcessor->process($data, $operation, $uriVariables, $context);
         return $this->innerProcessor->process($data, $operation, $uriVariables, $context);
         
     }

@@ -13,26 +13,20 @@ use ApiPlatform\Metadata\Post;
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\UuidV6;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[ApiResource(
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(
-        ),
+        new Post(),
         new Delete(),
     ],
     normalizationContext: ['groups' => ['customer:read']],
-    denormalizationContext:
-    [
-        "groups" => [
-            "date:write",
-            "customer:write"
-        ]
-    ]
+    denormalizationContext: ['groups' => [ "customer:write"]]
 )]
 class Customer
 {
@@ -44,6 +38,7 @@ class Customer
 
     #[ORM\Column(length: 255)]
     #[Groups(['customer:read', 'customer:write'])]
+    #[Assert\NotBlank]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -51,7 +46,7 @@ class Customer
     private ?string $firstName = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?\DateTimeImmutable $createdAt;
 
     #[ORM\Column(length: 255)]
     #[Groups(['customer:read', 'customer:write'])]    
@@ -70,7 +65,13 @@ class Customer
     #[ORM\Column(type: Types::GUID)]
     #[ApiProperty(identifier: true)]   
     #[Groups(['customer:read'])]
-    private ?string $uuid = null;
+    private ?string $uuid;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->uuid =  new UuidV6();
+    }
 
     public function getId(): ?int
     {

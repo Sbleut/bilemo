@@ -20,11 +20,13 @@ class CustomerQueryExtension implements QueryCollectionExtensionInterface, Query
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
+        dump($operation->getName());
         $this->addWhere($resourceClass, $queryBuilder);
     }
 
     public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, Operation $operation = null, array $context = []): void
     {
+        dump($operation->getName());
         $this->addWhere($resourceClass, $queryBuilder);
     }
 
