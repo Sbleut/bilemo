@@ -36,16 +36,20 @@ class Smartphone
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups('smartphone:read')]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('smartphone:read')]
     private ?string $brand = null;
 
     #[ORM\Column]
+    #[Groups('smartphone:read')]
     private ?float $price = null;
 
     #[ORM\Column(type: Types::GUID)]
     #[ApiProperty(identifier: true)]
+    #[Groups('smartphone:read')]
     private ?string $uuid = null;
 
     public function getId(): ?int

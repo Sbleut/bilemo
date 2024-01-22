@@ -30,6 +30,7 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -52,8 +53,8 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $companyName = null;
 
     #[ORM\Column(type: Types::GUID)]
-    #[Groups(['customer:read'])]
     #[ApiProperty(identifier: true)]
+    #[Groups(['customer:read'])]
     private ?string $uuid = null;
 
     #[ORM\OneToMany(mappedBy: 'reseller', targetEntity: Customer::class, orphanRemoval: true)]
