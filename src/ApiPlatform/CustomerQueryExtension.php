@@ -29,7 +29,7 @@ class CustomerQueryExtension implements QueryCollectionExtensionInterface, Query
     }
 
     /**
-     * @param string $resourceClass
+     * @param string $ressourceClass
      * @param QueryBuilder $queryBuilder
      * @return void
      */

@@ -10,15 +10,34 @@ use Symfony\Component\Uid\Uuid;
 
 class ResellerFixtures extends Fixture
 {
-    
+    /**
+     * Constant to reference load order
+     *
+     */
     public const RESELLER_REFERENCE = 'reseller';
+    /**
+     * UserPasswordHasher to Hash Password before bdd push
+     *
+     * @var [Hasher]
+     */
     private $userPasswordHasher;
     
+    /**
+     * Constructor to use UserPassxordHAsher interface as Injection dependancy
+     *
+     * @param UserPasswordHasherInterface $userPasswordHasher
+     */
     public function __construct(UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->userPasswordHasher = $userPasswordHasher;
     }
 
+    /**
+     * load function to push fake data in bdd. Here Reseller with default company name and all random properties are reated and pass to the manager.
+     *
+     * @param ObjectManager $manager
+     * @return void
+     */
     public function load(ObjectManager $manager): void
     {
         for ($i = 0; $i < 5; $i++) {
@@ -30,10 +49,11 @@ class ResellerFixtures extends Fixture
             $reseller->setPassword($this->userPasswordHasher->hashPassword($reseller, "password"));
             $this->addReference('reseller_'.$i, $reseller);
             $manager->persist($reseller);
-            $listReseller[]= $reseller;
         }
 
         $manager->flush();
+
+        
     }
 
 }

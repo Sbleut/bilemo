@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -29,6 +30,7 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -47,9 +49,12 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['customer:read'])]
     private ?string $companyName = null;
 
     #[ORM\Column(type: Types::GUID)]
+    #[ApiProperty(identifier: true)]
+    #[Groups(['customer:read'])]
     private ?string $uuid = null;
 
     #[ORM\OneToMany(mappedBy: 'reseller', targetEntity: Customer::class, orphanRemoval: true)]

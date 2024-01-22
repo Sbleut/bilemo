@@ -12,14 +12,19 @@ class SmartphoneFixtures extends Fixture
 {
 
     
-    // MODIFY Fixtures to match Entity + OneFile By FixtureEntity 
+    /**
+     * load function to push fake data in bdd. Fake smartphones are created here
+     *
+     * @param ObjectManager $manager
+     * @return void
+     */
     public function load(ObjectManager $manager): void
     {
         for ($i = 0; $i < 20; $i++) {
             $smartphone = new Smartphone();
-            $smartphone->setName("Smartphone " . $i);
-            $smartphone->setDescription("Ce téléphone présente les caractéristiques suivantes " . $i);
-            $smartphone->setBrand("Nokia " . $i);
+            $smartphone->setName("Smartphone ".$i);
+            $smartphone->setDescription("Ce téléphone présente les caractéristiques suivantes ".$i);
+            $smartphone->setBrand("Nokia ".$i);
             $randomPrice = mt_rand(10000, 200000) / 100;
             $smartphone->setPrice($randomPrice);
             $smartphone->setUuid(Uuid::v6());
@@ -28,6 +33,7 @@ class SmartphoneFixtures extends Fixture
         }
 
         $manager->flush();
+
 
     }
 }
