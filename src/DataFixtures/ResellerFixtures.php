@@ -46,7 +46,7 @@ class ResellerFixtures extends Fixture
             $reseller->setCompanyName("Operator" . $i);
             $reseller->setRoles(["ROLE_USER"]);
             $reseller->setUuid(Uuid::v6());
-            $reseller->setPassword($this->userPasswordHasher->hashPassword($reseller, "Y60vrqdBq9kcJwpY"));
+            $reseller->setPassword($this->userPasswordHasher->hashPassword($reseller, "Y60vrqdBq9!?"));
             $this->addReference('reseller_'.$i, $reseller);
             $manager->persist($reseller);
         }
