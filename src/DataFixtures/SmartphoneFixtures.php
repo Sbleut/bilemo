@@ -13,7 +13,7 @@ class SmartphoneFixtures extends Fixture
 
     
     /**
-     * load function to push fake data in bdd. Fake smartphones are created here
+     * load function to push fake data in bdd. Fake smartphones are created here.
      *
      * @param ObjectManager $manager
      * @return void

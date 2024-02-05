@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             securityMessage: 'Not Found'
         ),
         new GetCollection(
-            security:  'is_granted("ROLE_USER") and object.getReseller() == user',
+            security:  'is_granted("ROLE_USER")',
             securityMessage: 'Not Found'
         ),
         new Post(
