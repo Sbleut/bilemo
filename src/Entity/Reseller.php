@@ -16,12 +16,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV6;
+use Symfony\Component\Validator\Constraints\PasswordStrength;
 
 #[ORM\Entity(repositoryClass: ResellerRepository::class)]
 #[ApiResource(
     operations : [
         new Post(
-            validationContext: ['groups' => ['Default', 'postValidation'],]
+            validationContext: ['groups' => ['Default', 'postValidation'],],
+            security: 'is_granted("ROLE_ADMIN")'
         ),
     ],    
 )]
@@ -46,6 +49,10 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     #[Assert\NotBlank(groups: ['postValidation'])]
+    #[Assert\PasswordStrength([
+        'minScore' => PasswordStrength::STRENGTH_MEDIUM,
+        'message' => 'Please try a better password'
+    ])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
@@ -63,6 +70,7 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->customers = new ArrayCollection();
+        $this->uuid =  new UuidV6();
     }
 
     public function getId(): ?int
