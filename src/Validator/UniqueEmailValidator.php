@@ -15,7 +15,7 @@ class UniqueEmailValidator extends ConstraintValidator
     {
     }
 
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint) :void
     {
         assert($constraint instanceof UniqueEmail);
 
@@ -25,11 +25,11 @@ class UniqueEmailValidator extends ConstraintValidator
 
         $reseller = $this->security->getUser();
         if($reseller instanceof Reseller){
-            $resellerList = $reseller->getCustomers();
+            $customerList = $reseller->getCustomers();
         }
         $bEmail=false;
-        foreach ($resellerList as $reseller) {
-            if ($reseller->getEmail() === $value) {
+        foreach ($customerList as $customer) {
+            if ($customer->getEmail() === $value) {
                 $bEmail = true;
             }
         }
